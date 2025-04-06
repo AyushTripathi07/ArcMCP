@@ -1,31 +1,13 @@
-import asyncio
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
-import os
+from gradio_client import Client, handle_file
 
-# Set your token
-GITHUB_TOKEN = ""  # optional: use .env too
-
-# Define server parameters to launch the GitHub MCP server via npx
-server_params = StdioServerParameters(
-    command="npx",
-    args=["-y", "@modelcontextprotocol/server-github"],
-    env={"GITHUB_PERSONAL_ACCESS_TOKEN": GITHUB_TOKEN},
+client = Client("prithivMLmods/Gemma-3-Multimodal")
+result = client.predict(
+		message={"text":"Describe this image","files":[handle_file('https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png')]},
+		param_2=1024,
+		param_3=0.6,
+		param_4=0.9,
+		param_5=50,
+		param_6=1.2,
+		api_name="/chat"
 )
-
-async def run_client():
-    async with stdio_client(server_params) as streams:
-        async with ClientSession(streams[0], streams[1]) as session:
-            await session.initialize()
-
-            tools = await session.list_tools()
-            print("🛠️ Tools:", tools)
-
-            # Call a valid tool: search_repositories
-            result = await session.call_tool(
-                name="search_repositories",
-                arguments={"query": "mcp", "perPage": 5}
-            )
-            print("🔁 Result:", result)
-
-asyncio.run(run_client())
+print(result)
