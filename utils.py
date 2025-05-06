@@ -109,6 +109,33 @@ def analyze_images_with_gemma(image_files: list[str]) -> str:
         print("❌ Gemma image analysis failed:", e)
         return "Image analysis failed due to an error."
 
+
+# # Replace this prompt with the one you want to use
+# GEMMA_PROMPT_TEMPLATE = "Describe the content of this image."
+
+# def analyze_images_with_gemma(image_files: list[str]) -> str:
+#     # Updated client for the new API
+#     client = Client("huggingface-projects/gemma-3-12b-it")
+
+#     print("🔍 Sending all images to Gemma-3-12b-it...")
+#     uploaded_files = [handle_file(img_path) for img_path in image_files]
+
+#     try:
+#         result = client.predict(
+#             message={
+#                 "text": GEMMA_PROMPT_TEMPLATE,
+#                 "files": uploaded_files
+#             },
+#             param_2="You are a helpful assistant.",  # System prompt
+#             param_3=700,  # Max new tokens
+#             api_name="/chat"
+#         )
+#         print("✅ Image analysis completed.")
+#         return result
+#     except Exception as e:
+#         print("❌ Gemma image analysis failed:", e)
+#         return "Image analysis failed due to an error."
+
 # ================= GENERAL HELPERS =================
 
 def allowed_file(filename):
@@ -204,7 +231,7 @@ class StreamingManager:
         try:
             response = requests.post(
                 "http://localhost:11434/api/generate",
-                json={"model": "deepseek-r1", "prompt": prompt, "stream": False}
+                json={"model": "deepseek-r1:1.5b", "prompt": prompt, "stream": False}
             )
             if response.status_code == 200:
                 self.summarization_result = response.json().get("response", "")
