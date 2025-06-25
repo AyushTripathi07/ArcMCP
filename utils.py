@@ -13,6 +13,7 @@ from gradio_client import Client, handle_file
 # ================= CONFIG =================
 
 UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 ALLOWED_EXTENSIONS = {'pdf'}
 IMAGES_DIR = Path("images")
 IMAGES_DIR.mkdir(exist_ok=True)
